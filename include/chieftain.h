@@ -16,10 +16,16 @@
     typedef struct chieftain
     {
         valhalla_t *valhalla;   /* Referência para valhalla.  */
-        
-        /* TODO: Adicione aqui os atributos que achar necessários para implementar o
-        comportamento do chieftain. Esses atributos deverão ser usados pelas funções
-        do chieftain. */
+        pthread_mutex_t mutex;
+        pthread_cond_t cond_banquet; // fila de espera para sentar e pegar prato
+        pthread_cond_t cond_prayers; // esperar o banquete acabar para rezar
+
+        int *seat_state;     // -1 -> livre, 0 -> normal, 1 -> berserker
+        int *plate_state;    // 0 -> livre, 1 -> uso 
+        int *viking_plates;  //guardando os 2 pratos pegos por cada cadeira
+
+        unsigned int finished_eating_count;
+        unsigned int assigned_prayers[NUMBER_OF_GODS];
     } chieftain_t;
 
     /*============================================================================*
